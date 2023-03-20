@@ -1,0 +1,8 @@
+# Google App Engine generated folder
+appengine-generated/
+# Macos system file
+.DS_Store
+/.idea
+*/.DS_Store
+/static/image/*.jpg
+/static/video/*.mp4
