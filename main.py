@@ -1,7 +1,7 @@
-from config import config
-from data.csv import read_csv, write_csv
-from data.excel import read_excel, write_excel
-from data.ner import sentence_split, spacy_label_mark, create_write_data,ner
+from src.config import config
+from src.data.csv import read_csv, write_csv
+from src.data.excel import read_excel
+from src.coarse_ist import coarse_ist
 
 
 def read_weibo(path, fileType):
@@ -22,18 +22,15 @@ def read_weibo(path, fileType):
         print("请输入正确的类型，仅支持csv与excel文件格式！")
     result = []
     for item in dataSetData:
-        result.append({'create_at': str(item[1]), 'text': str(item[2]), 'region': str(item[4])})  # 构造list
+        result.append(
+            {'create_at': str(item[1]), 'text': str(item[2]), 'region': str(item[4]), 'mid': str(item[0])})  # 构造list
     return result
 
 
 if __name__ == '__main__':
-    # fields = ['text', 'sentence', 'create_at', 'ner_time', 'ner_gpe', 'ner_fac', 'stand_time', 'stand_time_status',
-    #           'stand_loc', 'stand_loc_status', 'lng-bd09', 'lat-bd09', 'lng-wgs84', 'lat-wgs84', 'street_id']  # 列名
     fields = ['text', 'sentence', 'create_at', 'ner_time', 'ner_gpe', 'ner_fac', 'stand_time', 'stand_time_status',
-              'stand_loc', 'stand_loc_status', 'loc_bd09', 'loc_wgs84', 'street_id']  # 列名
-    write_csv(config.SAVE_PATH, fields)  # 写标签列   验证csv可能会导致mid错乱，弃用csv
+              'stand_loc', 'stand_loc_status', 'loc_wgs84', 'loc_confidence', 'mid']  # 列名
+    write_csv(config.SAVE_PATH, fields)  # 写标签列
     # write_excel(config.SAVE_PATH, fields)   # 写标签列
     data = read_weibo(config.ORIGINAL_PATH, fileType="excel")  # 读取数据库导出的EXCEL数据
-    ner(data)
-
-
+    coarse_ist(data)  # 粗粒度时空信息提取

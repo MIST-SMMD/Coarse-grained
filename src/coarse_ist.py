@@ -8,14 +8,14 @@
 
 
 import spacy
-import src.unit.status
+import src.config.status
 import pandas as pd
 import jionlp as jio
 from src.config import config
 from datetime import datetime
 from src.data.csv import write_csv
-from src.api.baidu import Geocoder_v3_search_stloc
-from src.data.standardize import time_standardize, space_standardize
+from src.coarse_ist.baidu import Geocoder_v3_search_stloc
+from src.coarse_ist.standardize import time_standardize, space_standardize
 
 spacy.require_gpu()  # 使用GPU请取消该行注释
 NER = spacy.load("zh_core_web_trf",

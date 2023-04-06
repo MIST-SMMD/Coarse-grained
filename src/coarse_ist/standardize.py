@@ -9,7 +9,7 @@ import time
 import datetime
 import jionlp as jio
 from src.config import config
-from src.unit.status import TimeStandardStatus, SpaceStandardStatus
+from src.config.status import TimeStandardStatus, SpaceStandardStatus
 
 def del_Useless_timeWords(nerTimeFormat):
     """
