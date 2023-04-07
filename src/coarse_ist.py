@@ -217,7 +217,7 @@ def NER_Standardize_Geocoder(i, sentence,NER):
         #     break
 
     # 导出粗粒度标准化表为xlsx文件
-    df = pd.DataFrame(location)
+    df = pd.DataFrame(location,columns=["mid","date","time_status","ts_loc","space_status","X_WGS84","Y_WGS84","confidence","buffer"])
     df.to_excel(config.RESULT_SAVE_PATH, index=False)
 
     end_time = datetime.now()
