@@ -24,9 +24,9 @@ TENCENT_API_SK = ''
 
 
 # LOCAL FILE PATH
-ORIGINAL_PATH = r'asserts/dataset/weibo_dataset.xlsx'
-TEMP_SAVE_PATH = r'output/coarse_ist_temp.csv'
-RESULT_SAVE_PATH = r'output/coarse_ist_result.xlsx'
+ORIGINAL_PATH = r'/content/MIST-SMMD/asserts/dataset/weibo_dataset.xlsx'
+TEMP_SAVE_PATH = r'/content/MIST-SMMD/output/coarse_ist_temp.csv'
+RESULT_SAVE_PATH = r'/content/MIST-SMMD/output/coarse_ist_result.xlsx'
 
 # KEYWORD
 TIME_KEYWORD = ["月","日","昨天","今天","前天"]  # 时间相关关键字
