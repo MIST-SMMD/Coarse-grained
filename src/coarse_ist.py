@@ -17,13 +17,6 @@ from src.data.csv import write_csv
 from src.coarse_ist_process.baidu import Geocoder_v3_search_stloc
 from src.coarse_ist_process.standardize import time_standardize, space_standardize
 
-spacy.require_gpu()  # 不使用GPU请注释该行
-NER = spacy.load("zh_core_web_trf",
-                 exclude=["tagger", "parser", "entity_linker", "entity_ruler", "textcat", "textcat_multilabel",
-                          "lemmatizer", "trainable_lemmatizer", "morphologizer", "attribute_ruler", "senter",
-                          "sentencizer", "tok2vec"])  # 排除部分无关标签，提升效率
-
-
 def flatten_list(write_data):
     """
         用于flatten输入的列表
@@ -117,7 +110,7 @@ def create_write_data(native_data, sentence, label_info):
     return result
 
 
-def NER_Standardize_Geocoder(i, sentence):
+def NER_Standardize_Geocoder(i, sentence,NER):
     """
         实现NER、时空标准化、地理编码
         NER部分采用spacy， 包: zh_core_web_trf, python -m spacy download zh_core_web_trf
@@ -232,10 +225,22 @@ def NER_Standardize_Geocoder(i, sentence):
     print('Total processing time elapsed:%s,Total %i tweets,Average time spent per text:%s' % (sum_time, current, sum_time / current))
 
 
-def coarse_ist(data):
+def coarse_ist(data,devices:str):
+    if devices.upper() == "GPU":
+        spacy.require_gpu()  # 使用GPU进行NER
+        print("GPU is enabled and ready for NER")
+    elif devices.upper() == "CPU":
+        print("CPU is enabled and ready for NER")
+    else:
+        print("Please use the correct device: GPU or CPU !")
+    # 载入NER模型
+    NER = spacy.load("zh_core_web_trf",
+                     exclude=["tagger", "parser", "entity_linker", "entity_ruler", "textcat", "textcat_multilabel",
+                              "lemmatizer", "trainable_lemmatizer", "morphologizer", "attribute_ruler", "senter",
+                              "sentencizer", "tok2vec"])  # 排除部分无关标签，提升效率
     # 文本分句
     sentence_list = []
     for i in range(len(data)):
         sentence_list.append(sentence_split(data[i]['text'], cri='coarse'))
     # 一次性实现NER、时空标准化、地理编码
-    NER_Standardize_Geocoder(data, sentence_list)
+    NER_Standardize_Geocoder(data, sentence_list,NER)
