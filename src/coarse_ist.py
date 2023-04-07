@@ -128,7 +128,6 @@ def NER_Standardize_Geocoder(i, sentence,NER):
     current = 0
     result = {}
     location = []
-    star_time = datetime.now()
     error_dict = {
         30: 5000,
         40: 2000,
@@ -141,6 +140,7 @@ def NER_Standardize_Geocoder(i, sentence,NER):
         100: 20,
     }
     print(f'Total data volume: {len(sentence)} ')
+    star_time = datetime.now()
     for sentence_num in range(len(sentence)):  # 遍历jionlp分句的列表
         result.clear()
         t1 = datetime.now()  # 开始时间

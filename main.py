@@ -32,4 +32,4 @@ if __name__ == '__main__':
     write_csv(config.TEMP_SAVE_PATH, fields)  # 写标签列
     # write_excel(config.SAVE_PATH, fields)   # 写标签列
     data = read_weibo(config.ORIGINAL_PATH, fileType="excel")  # 读取数据库导出的EXCEL数据
-    coarse_ist(data,devices="GPU")  # 粗粒度时空信息提取
+    coarse_ist(data[:100],devices="GPU")  # 粗粒度时空信息提取(这里默认CPU且演示前一百个)
