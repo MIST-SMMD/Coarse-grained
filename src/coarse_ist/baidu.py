@@ -10,14 +10,12 @@
     百度地图开放平台
 """
 
-
+import re
+import json
+import hashlib
 import requests
 from urllib import parse
 from src.config import config
-import hashlib
-import json
-import re
-
 from src.coarse_ist.coordinate import bd09_to_wgs84
 
 # 百度地图开放平台 URL (修改./config/config.py)
@@ -69,7 +67,6 @@ def place_v2_search(query: str, region: str = "全国"):
     response = json.loads(requests.get(host + apiURL).text)
     # 请求结果
     result = []
-    print(response)
     # 遍历返回数据
     for i in response['results']:
         # 构造列表（地点名称，经纬度，街景地图ID)
@@ -108,7 +105,6 @@ def Geocoder_v3_search(query:str,key:str):
     if not isinstance(response, dict):
         return
     position = 0
-    print(response)
     if response['status'] != 0:
         if response['status'] == "302":
             ak[position][key] = False

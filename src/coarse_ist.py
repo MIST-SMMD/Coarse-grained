@@ -17,7 +17,7 @@ from src.data.csv import write_csv
 from src.coarse_ist.baidu import Geocoder_v3_search_stloc
 from src.coarse_ist.standardize import time_standardize, space_standardize
 
-spacy.require_gpu()  # 使用GPU请取消该行注释
+spacy.require_gpu()  # 不使用GPU请注释该行
 NER = spacy.load("zh_core_web_trf",
                  exclude=["tagger", "parser", "entity_linker", "entity_ruler", "textcat", "textcat_multilabel",
                           "lemmatizer", "trainable_lemmatizer", "morphologizer", "attribute_ruler", "senter",
@@ -181,7 +181,7 @@ def NER_Standardize_Geocoder(i, sentence):
             if not write_data:
                 continue
 
-            write_csv(config.SAVE_PATH, write_data)  # 追加CSV数据
+            write_csv(config.TEMP_SAVE_PATH, write_data)  # 追加CSV数据
 
             # 若有地理编码后的坐标且大于等于30的置信度就保留，同时计算置信度相对应的缓冲区大小（百度地图标准）
             if isinstance(write_data[10], str):
@@ -219,17 +219,17 @@ def NER_Standardize_Geocoder(i, sentence):
 
         current += 1
         t2 = datetime.now()  # 结束时间
-        print(f'当前执行: {current} / 总数据: {len(sentence)} 单条耗时: {str(t2 - t1)}')  # 状态显示
+        print(f'Currently executing: {current} / Total data volume: {len(sentence)} Single text processing time: {str(t2 - t1)}')  # 状态显示
         # if current > 1000:
         #     break
 
     # 导出粗粒度标准化表为xlsx文件
     df = pd.DataFrame(location)
-    df.to_excel('data1.xlsx', index=False)
+    df.to_excel(config.RESULT_SAVE_PATH, index=False)
 
     end_time = datetime.now()
     sum_time = end_time - star_time
-    print('总处理时间耗时:%s,共%i条微博,平均每条耗时:%s' % (sum_time, current, sum_time / current))
+    print('Total processing time elapsed:%s,Total %i tweets,Average time spent per text:%s' % (sum_time, current, sum_time / current))
 
 
 def coarse_ist(data):

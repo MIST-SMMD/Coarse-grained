@@ -24,8 +24,9 @@ TENCENT_API_SK = ''
 
 
 # LOCAL FILE PATH
-ORIGINAL_PATH = r'L:\！！项目\【2】融合社交媒体图文的灾害事件点定位研究\!!最终\dataset\ZhengZhou\[2-textcat-screened]weibo_dataset.xlsx'
-SAVE_PATH = r'L:\！！项目\【2】融合社交媒体图文的灾害事件点定位研究\!!最终\dataset\test10.csv'
+ORIGINAL_PATH = r'asserts\dataset\[2-textcat-screened]weibo_dataset.xlsx'
+TEMP_SAVE_PATH = r'output\coarse_ist_temp.csv'
+RESULT_SAVE_PATH = r'output\coarse_ist_result.xlsx'
 
 # KEYWORD
 TIME_KEYWORD = ["月","日","昨天","今天","前天"]  # 时间相关关键字
