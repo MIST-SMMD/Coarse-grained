@@ -2,7 +2,7 @@
 # !/usr/bin/python
 # -*- coding: UTF-8 -*-
 # @Project: mist
-# @FileName: coarse_ist
+# @FileName: coarse_ist_process
 # @Author：Uyoin (Yilong Wu) (https://github.com/uyoin),Ryan Zhang (https://github.com/hz157)
 # @DateTime: 3/3/2023 上午10:31
 
@@ -10,12 +10,12 @@
 import spacy
 import src.config.status
 import pandas as pd
-import jionlp as jio
 from src.config import config
 from datetime import datetime
+from jionlp import split_sentence
 from src.data.csv import write_csv
-from src.coarse_ist.baidu import Geocoder_v3_search_stloc
-from src.coarse_ist.standardize import time_standardize, space_standardize
+from src.coarse_ist_process.baidu import Geocoder_v3_search_stloc
+from src.coarse_ist_process.standardize import time_standardize, space_standardize
 
 spacy.require_gpu()  # 不使用GPU请注释该行
 NER = spacy.load("zh_core_web_trf",
@@ -55,7 +55,7 @@ def sentence_split(text, cri):
 
     """
     try:
-        sentence = jio.split_sentence(text, criterion=cri)  # jionlp 文本分句
+        sentence = split_sentence(text, criterion=cri)  # jionlp 文本分句
         return sentence
     except Exception as e:
         print(e)
@@ -103,7 +103,7 @@ def create_write_data(native_data, sentence, label_info):
             result[7] = ner_time_status  # 追加ner时间状态
         else:
             result[6] = result[2].split(" ")[0]
-            result[7] = src.unit.status.TimeStandardStatus.unrecognized.value
+            result[7] = src.config.status.TimeStandardStatus.unrecognized.value
         ner_spacy, ner_spacy_status = space_standardize(label_info, native_data)  # 空间标准化
         result[8] = ner_spacy
         result[9] = ner_spacy_status
@@ -154,7 +154,7 @@ def NER_Standardize_Geocoder(i, sentence):
         sub_sentence = sentence[sentence_num]  # 分句后的子句
         NER.max_length = len(max(sub_sentence, key=len))  # 自定义max_length为该句的字符长度，减少内存占用
         pipe = NER.pipe(sub_sentence, batch_size=1024)  # 对分句后的子句进行NER，batch_size可根据运行设备显存来设定
-
+        print(f'Total data volume: {len(sentence)} ')
         GPE = []
         for text in pipe:
             result.clear()
@@ -219,7 +219,7 @@ def NER_Standardize_Geocoder(i, sentence):
 
         current += 1
         t2 = datetime.now()  # 结束时间
-        print(f'Currently executing: {current} / Total data volume: {len(sentence)} Single text processing time: {str(t2 - t1)}')  # 状态显示
+        print(f'Currently executing: {current} / {len(sentence)} | Single text processing time: {str(t2 - t1)}')  # 状态显示
         # if current > 1000:
         #     break
 

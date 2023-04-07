@@ -30,7 +30,7 @@ def read_weibo(path, fileType):
 if __name__ == '__main__':
     fields = ['text', 'sentence', 'create_at', 'ner_time', 'ner_gpe', 'ner_fac', 'stand_time', 'stand_time_status',
               'stand_loc', 'stand_loc_status', 'loc_wgs84', 'loc_confidence', 'mid']  # 列名
-    write_csv(config.SAVE_PATH, fields)  # 写标签列
+    write_csv(config.TEMP_SAVE_PATH, fields)  # 写标签列
     # write_excel(config.SAVE_PATH, fields)   # 写标签列
     data = read_weibo(config.ORIGINAL_PATH, fileType="excel")  # 读取数据库导出的EXCEL数据
     coarse_ist(data)  # 粗粒度时空信息提取

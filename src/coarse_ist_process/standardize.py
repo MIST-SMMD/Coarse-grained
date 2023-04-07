@@ -7,8 +7,8 @@
 # @DateTime: 3/3/2023 下午12:50
 import time
 import datetime
-import jionlp as jio
 from src.config import config
+from jionlp import parse_time,parse_location,recognize_location
 from src.config.status import TimeStandardStatus, SpaceStandardStatus
 
 def del_Useless_timeWords(nerTimeFormat):
@@ -63,7 +63,7 @@ def time_standardize(nerTimeFormat, rawTimeFormat):
     try:
         # 遍历解析时间
         for nerTime in nerTimeFormat:
-            parseTime = jio.parse_time(nerTime,
+            parseTime = parse_time(nerTime,
                                        time_base={'year': int(rawSplit[0]),
                                                   'month': int(rawSplit[1]),
                                                   'day': int(rawSplit[2])})
@@ -166,24 +166,24 @@ def space_standardize(labelData, rawData):
     if 'GPE' not in labelData.keys() or len(labelData['GPE']) == 0:
         if rawData['region'] == "nodata":
             return "Nodata", SpaceStandardStatus.miss_gpe  # 丢失GPE信息
-        if Is_foreign(jio.recognize_location(rawData['region'])) == 1:
+        if Is_foreign(recognize_location(rawData['region'])) == 1:
             return 'Foreign', SpaceStandardStatus.foreign.value  # 中国大陆境外数据直接丢弃
         GPE = rawData['region']
         for item in labelData['FAC']:
-            locSet.append(jio.parse_location(GPE + item, change2new=True, town_village=True))
+            locSet.append(parse_location(GPE + item, change2new=True, town_village=True))
         locSet, status = create_full_space(locSet)
     elif 'GPE' in labelData.keys():
         jio_region = []
         # 首先判断IP地址是否存在且为国外
         if rawData['region'] != "nodata":
-            if Is_foreign(jio.recognize_location(rawData['region'])) == 1:
+            if Is_foreign(recognize_location(rawData['region'])) == 1:
                 return 'Foreign', SpaceStandardStatus.foreign.value  # 中国大陆境外数据直接丢弃
         # 补全每个GPE并判断是否国外
         flag = []
         for i in range(len(labelData['GPE'])):
-            region = jio.recognize_location(labelData['GPE'][i])
+            region = recognize_location(labelData['GPE'][i])
             if region['domestic'] is not None:
-                if Is_foreign(jio.recognize_location(rawData['region'])) == 1:
+                if Is_foreign(recognize_location(rawData['region'])) == 1:
                     return 'Foreign', SpaceStandardStatus.foreign.value  # 中国大陆境外数据直接丢弃
                 jio_region.append(region['domestic'][0][0])
             # 如果是无用GPE直接抛弃
@@ -216,13 +216,13 @@ def space_standardize(labelData, rawData):
                 flag.append(i)
                 continue
             for region in region_list:
-                locSet.append(jio.parse_location(region + labelData['FAC'][i], change2new=True, town_village=True))
+                locSet.append(parse_location(region + labelData['FAC'][i], change2new=True, town_village=True))
         # 除掉小于2长度的FAC（经测试，小于2都是无用提取）
         for i in sorted(flag, reverse=True):
             del labelData['FAC'][i]
         if rawData['region'] != "nodata":
             for item in labelData['FAC']:
-                locSet.append(jio.parse_location(rawData['region'] + item, change2new=True, town_village=True))
+                locSet.append(parse_location(rawData['region'] + item, change2new=True, town_village=True))
         locSet, status = create_full_space(locSet)
 
         if not locSet:

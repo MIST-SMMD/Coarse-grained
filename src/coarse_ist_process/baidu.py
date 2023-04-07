@@ -16,7 +16,7 @@ import hashlib
 import requests
 from urllib import parse
 from src.config import config
-from src.coarse_ist.coordinate import bd09_to_wgs84
+from src.coarse_ist_process.coordinate import bd09_to_wgs84
 
 # 百度地图开放平台 URL (修改./config/config.py)
 host = config.BAIDU_API_HOST
