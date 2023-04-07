@@ -1,8 +1,7 @@
 from src.config import config
-from src.data.csv import read_csv, write_csv
 from src.data.excel import read_excel
 from src.coarse_ist import coarse_ist
-
+from src.data.csv import read_csv, write_csv
 
 def read_weibo(path, fileType):
     """

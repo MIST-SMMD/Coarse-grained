@@ -147,14 +147,14 @@ def NER_Standardize_Geocoder(i, sentence):
         90: 50,
         100: 20,
     }
-
+    print(f'Total data volume: {len(sentence)} ')
     for sentence_num in range(len(sentence)):  # 遍历jionlp分句的列表
         result.clear()
         t1 = datetime.now()  # 开始时间
         sub_sentence = sentence[sentence_num]  # 分句后的子句
         NER.max_length = len(max(sub_sentence, key=len))  # 自定义max_length为该句的字符长度，减少内存占用
         pipe = NER.pipe(sub_sentence, batch_size=1024)  # 对分句后的子句进行NER，batch_size可根据运行设备显存来设定
-        print(f'Total data volume: {len(sentence)} ')
+
         GPE = []
         for text in pipe:
             result.clear()
