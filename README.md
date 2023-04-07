@@ -12,7 +12,7 @@ Discussions about the paper are welcomed in the [discussion panel](https://githu
 
 ## Colab demo
 Want to run MIST-SMMD with custom image pairs without configuring your own GPU environment? Try the Colab demo:
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1BgNIOjFHauFoNB95LGesHBIjioX74USW?usp=sharing)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1YUyLpwX7LgOK9FaraktSvX4nd2851qe2?usp=sharing)
 
 ## Installation
 **Conda:**
