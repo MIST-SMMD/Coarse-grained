@@ -1,5 +1,5 @@
 # MIST-SMMD:A Spatio-Temporal Information Extraction Method Based on Multimodal Social Media Data
-### [Preprint](https://www.preprints.org/) | [Paper](https://www.mdpi.com/journal/ijgi)
+### [Preprint](https://www.preprints.org/manuscript/202305.1205/v1) | [Paper](https://www.mdpi.com/journal/ijgi)
 <br/>
 
 >A spatio-temporal information extraction method based on multimodal social media data: A case study on urban inundation  
