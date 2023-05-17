@@ -3,7 +3,7 @@
 <br/>
 
 >A spatio-temporal information extraction method based on multimodal social media data: A case study on urban inundation  
->[Yilong Wu](https://github.com/uyoin), [Rongyu Zhang](https://github.com/hz157), [Yingjie Chen](https://github.com/FalleNSakura2002), [Zhenfei Cui](http://www.cad.zju.edu.cn/home/bao/), [Xinyi Liu](http://www.cad.zju.edu.cn/home/xzhou/), [Jiayi Zhang](http://www.cad.zju.edu.cn/home/bao/), [Yong Wu](http://geo.fjnu.edu.cn/3e/21/c4964a81441/page.htm)<sup>*</sup>  
+>[Yilong Wu](https://github.com/uyoin),  [Yingjie Chen](https://github.com/FalleNSakura2002),[Rongyu Zhang](https://github.com/hz157), [Zhenfei Cui](http://www.cad.zju.edu.cn/home/bao/), [Xinyi Liu](http://www.cad.zju.edu.cn/home/xzhou/), [Jiayi Zhang](http://www.cad.zju.edu.cn/home/bao/), [Yong Wu](http://geo.fjnu.edu.cn/3e/21/c4964a81441/page.htm)<sup>*</sup>  
 > Nodata  
 
 Discussions about the paper are welcomed in the [discussion panel](https://github.com/discussions).
