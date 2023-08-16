@@ -9,7 +9,7 @@
 
 
 """
-    CSV文件读写操作
+    CSV file read and write operations
 """
 
 import os
@@ -18,35 +18,35 @@ import csv
 
 def read_csv(path, encoding: str = 'utf-8'):
     """
-        读取CSV文件
-    Args:
-        path: csv文件路径
-        encoding: 编码格式. Defaults to 'utf-8'.
+        Reading a CSV file
+    Args.
+        path: path to csv file
+        encoding: encoding format. Defaults to 'utf-8'.
 
     Returns:list or None
 
     """
     result = []
-    if os.path.exists(path):  # 判断CSV是否存在
+    if os.path.exists(path): 
         with open(path, 'r', encoding=encoding) as f:
             lines = csv.reader(f)
             next(lines)
             for line in lines:
                 result.append(line)
         return result
-    else:  # 不存在返回空值
+    else: 
         return None
 
 
 def write_csv(path, fields, encoding: str = 'utf-8-sig'):
     """
-        写入CSV文件
-    Args:
-        path: csv文件路径
-        fields: 字段
-        encoding: 编码格式. Defaults to 'utf-8-sig'.
+        Write to CSV file
+    parameter:
+        path: path to the csv file
+        fields: fields
+        encoding: encoding format. Default is "utf-8-sig".
 
-    Returns: True Success, False Fail
+    Return Value True for success, false for failure
 
     """
     try:
