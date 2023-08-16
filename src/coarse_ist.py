@@ -19,36 +19,36 @@ from src.coarse_ist_process.standardize import time_standardize, space_standardi
 
 def flatten_list(write_data):
     """
-        用于flatten输入的列表
-    Args:
-        write_data: 待flatten的列表
+        List for flatten input
+    Args.
+        write_data: list to be flattened
 
-    Returns:    list_need：flatten后的列表
+    Returns: list_need: list after flatten
 
     """
     global global_var
     list_need = []
     for item in write_data:
-        if isinstance(item, list):  # 如果当前元素是列表，递归调用flatten_list函数
+        if isinstance(item, list): # If the current element is a list, recursively call flatten_list function
             flatten_list(item)
-        else:  # 否则将当前元素添加到全局变量中
+        else: # Otherwise add the current element to the global variable
             list_need.append(item)
     return list_need
 
 
 def sentence_split(text, cri):
     """
-        文本分句， 采用jionlp.split_sentence
-        https://github.com/dongrixinyu/JioNLP/wiki/Gadget-%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3#user-content-%E6%96%87%E6%9C%AC%E5%88%86%E5%8F%A5
-    Args:
-        text: 文本列表
-        cri: 粒度 分为 coarse粗粒度 和 fine细粒度
+        Text Split Sentence, using jionlp.split_sentence
+        https://github.com/dongrixinyu/JioNLP/wiki/Gadget-%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3#user-content-%E6%96%87%E6%9C%AC%E5%88%86% E5%8F%A5
+    Args.
+        text: text list
+        cri: granularity, coarse and fine.
 
-    Returns: 文本结果 list
+    Returns: text result list
 
     """
     try:
-        sentence = split_sentence(text, criterion=cri)  # jionlp 文本分句
+        sentence = split_sentence(text, criterion=cri)  # jionlp text clauses
         return sentence
     except Exception as e:
         print(e)
@@ -57,47 +57,47 @@ def sentence_split(text, cri):
 
 def create_write_data(native_data, sentence, label_info):
     """
-        构造中间结果列表，用于后续导出csv观察和检查粗粒度提取的中间结果
-    Args:
-        native_data: 爬取的原数据字典
-        sentence: jionlp 拆分的句子
-        label_info：该句NER提取的所有标签信息字典
+        Constructs a list of intermediate results for subsequent exporting of csv observations and checking intermediate results of coarse-grained extraction
+    Args.
+        native_data: the crawled native data dictionary
+        sentence: sentence split by jionlp
+        label_info: dictionary of all labels extracted from this sentence.
 
-    Returns: result：中间结果列表
+    Returns: result: list of intermediate results
 
     """
     result = [[]] * 14
     check = [[]] * 14
-    if 'FAC' in label_info.keys():  # 判断是否有空间信息，无则弃之
-        result[0] = native_data['text']  # 原始文本
-        result[1] = sentence  # jionlp 拆分的句子
-        result[2] = native_data['create_at']  # 博文时间
+    if 'FAC' in label_info.keys(): # Determine if there is spatial information, discard if there is none
+        result[0] = native_data['text'] # raw text
+        result[1] = sentence # sentence split by jionlp
+        result[2] = native_data['create_at'] # time of the blog post
         TIME = []
-        if 'DATE' in label_info.keys():  # 判断是否有DATE标签
-            TIME = label_info['DATE']
-        if 'TIME' in label_info.keys():
-            TIME = TIME + label_info['TIME']  # spacy 时间
-        result[3] = TIME  # spacy 时间
+        if 'DATE' in label_info.keys(): # determine if there is a DATE label
+            TIME = label_info['DATE'] # blog post time
+        if 'TIME' in label_info.keys(): # Determine if there is a DATE label TIME = label_info['DATE'].
+            TIME = TIME + label_info['TIME'] # spacy time
+        result[3] = TIME # spacy time
         if len(label_info['GPE']) > 0:
-            result[4] = label_info['GPE']  # spacy 行政区
-        elif native_data['region'] != "":
-            result[4] = native_data['region']
+            result[4] = label_info['GPE'] # spacy administrative district
+        elif native_data['region'] ! = "":
+            result[4] = native_data['region'] # spacy Administrative regions
         else:
             result[4] = ''
-        if label_info['FAC'] in config.FAC_REVERSE_KEYWORD:  # 设施反向关键字 修改config/config.py
-            result[5] = ''  # 反向关键字排除，添加空数据
+        if label_info['FAC'] in config.FAC_REVERSE_KEYWORD: # facility reverse keyword modify config/config.py
+            result[5] = '' # reverse keyword exclusion, add empty data
         else:
-            result[5] = label_info['FAC']  # spacy 设施
+            result[5] = label_info['FAC'] # spacy facility
 
-        if 'TIME' in label_info.keys() or 'DATE' in label_info.keys():  # 判断是否有时间标签信息，无则直接使用创建时间
+        if 'TIME' in label_info.keys() or 'DATE' in label_info.keys(): # Determine if there is timestamp information, if not then directly use creation time
             ner_time, ner_time_status = time_standardize(TIME,
-                                                             native_data['create_at'])  # 时间标准化
-            result[6] = ner_time  # 追加ner时间数据
-            result[7] = ner_time_status  # 追加ner时间状态
+                                                             native_data['create_at']) # time standardization
+            result[6] = ner_time # append ner time data
+            result[7] = ner_time_status # Append ner time status
         else:
             result[6] = result[2].split(" ")[0]
             result[7] = src.config.status.TimeStandardStatus.unrecognized.value
-        ner_spacy, ner_spacy_status = space_standardize(label_info, native_data)  # 空间标准化
+        ner_spacy, ner_spacy_status = space_standardize(label_info, native_data) # space standardization
         result[8] = ner_spacy
         result[9] = ner_spacy_status
         loc_wgs84, confidence = Geocoder_v3_search_stloc(ner_spacy, ner_spacy_status)
@@ -112,19 +112,18 @@ def create_write_data(native_data, sentence, label_info):
 
 def NER_Standardize_Geocoder(i, sentence,NER):
     """
-        实现NER、时空标准化、地理编码
-        NER部分采用spacy， 包: zh_core_web_trf, python -m spacy download zh_core_web_trf
-    Args:
-        i:爬取的原数据字典
-        sentence: 经过jionlp分句的列表 list
+        Implementing NER, spatio-temporal normalization, geocoding
+        NER partially using spacy, package: zh_core_web_trf, python -m spacy download zh_core_web_trf
+    Args.
+        Args: i: the original data dictionary to be crawled.
+        sentence: list after jionlp clause list
 
-    Returns: 标签信息和数据 dict
+    Returns: tag information and data dict
 
     """
     if sentence is None:
         return
 
-    # 一些初始化
     current = 0
     result = {}
     location = []
@@ -141,42 +140,41 @@ def NER_Standardize_Geocoder(i, sentence,NER):
     }
     print(f'Total data volume: {len(sentence)} ')
     star_time = datetime.now()
-    for sentence_num in range(len(sentence)):  # 遍历jionlp分句的列表
+    for sentence_num in range(len(sentence)): # iterate through the list of jionlp clauses
         result.clear()
-        t1 = datetime.now()  # 开始时间
-        sub_sentence = sentence[sentence_num]  # 分句后的子句
-        NER.max_length = len(max(sub_sentence, key=len))  # 自定义max_length为该句的字符长度，减少内存占用
-        pipe = NER.pipe(sub_sentence, batch_size=1024)  # 对分句后的子句进行NER，batch_size可根据运行设备显存来设定
+        t1 = datetime.now() # start time
+        sub_sentence = sentence[sentence_num] # sub-sentence after clause
+        NER.max_length = len(max(sub_sentence, key=len)) # Customize max_length to be the character length of the sentence to reduce memory usage
+        pipe = NER.pipe(sub_sentence, batch_size=1024) # NER the clause after the split, batch_size can be set according to the running device memory
 
         GPE = []
         for text in pipe:
             result.clear()
-            # 没标签就拜拜
             if len(text.ents) == 0 or text.ents == '……':
                 continue
 
-            # 获取这句话的所有标签
-            for ent in text.ents:
-                if ent.label_ in result.keys():  # 之前已写入该标签
-                    value = result[ent.label_]  # 获取之前写入的数据
-                    value.append(ent.text)  # 追加新的数据
-                    result[ent.label_] = value  # 重新赋值
-                else:  # 之前未写入该标签
-                    result[ent.label_] = [ent.text]  # 赋值
+            # Get all the tags for this sentence
+            for ent in text.ents: # previously written to this label
+                if ent.label_ in result.keys(): # previously written to this label
+                    value = result[ent.label_] # Get the previously written data
+                    value.append(ent.text) # append new data
+                    result[ent.label_] = value # reassign the value
+                else: # The label was not written before
+                    result[ent.label_] = [ent.text] # assign value
 
-            # 对于整段话需要进行GPE的暂时固化并覆盖，否则下一句即使有FAC，也无法连接组合
+            # Temporary curing and overwriting of GPE is required for the entire sentence, otherwise the next sentence cannot connect the combination even if it has a FAC
             if "GPE" in result:
                 for gpe in result['GPE']:
                     GPE.append(gpe)
             result['GPE'] = list(set(GPE))
 
-            write_data = create_write_data(i[current], text, result) # ※时空标准化、地理编码在这里面
+            write_data = create_write_data(i[current], text, result) # ※Time standardization, geocoding is in here 
             if not write_data:
                 continue
 
-            write_csv(config.TEMP_SAVE_PATH, write_data)  # 追加CSV数据
+            write_csv(config.TEMP_SAVE_PATH, write_data)
 
-            # 若有地理编码后的坐标且大于等于30的置信度就保留，同时计算置信度相对应的缓冲区大小（百度地图标准）
+            # If there are geocoded coordinates with a confidence level greater than or equal to 30, retain them and calculate the buffer size corresponding to the confidence level (Baidu map standard)
             if isinstance(write_data[10], str):
                 if write_data[10] == "Nodata" or write_data[11] == "Nodata":
                     continue
@@ -199,24 +197,21 @@ def NER_Standardize_Geocoder(i, sentence,NER):
                     lat = WGS84[1]
                     confidence = int(z.split("  ")[0])
                     if confidence >= 30:
-                        # 根据confidence值从字典中获取解析误差绝对精度的阈值
+                        # Threshold for absolute precision of parsing error from dictionary based on CONFIDENCE value
                         for threshold in error_dict:
                             if confidence == threshold:
                                 error_threshold = error_dict[threshold]
                                 break
                         else:
-                            error_threshold = 5000  # 如果字典中没有匹配的值，将误差范围设为5000米
+                            error_threshold = 5000  # If there is no matching value in the dictionary, set the margin of error to 5000 meters
                         location.append(
                             [write_data[12], time, time_status, std_loc, stdloc_status, lon, lat, confidence,
                              error_threshold])
 
         current += 1
-        t2 = datetime.now()  # 结束时间
-        print(f'Currently executing: {current} / {len(sentence)} | Single text processing time: {str(t2 - t1)}')  # 状态显示
-        # if current > 1000:
-        #     break
+        t2 = datetime.now()
+        print(f'Currently executing: {current} / {len(sentence)} | Single text processing time: {str(t2 - t1)}')
 
-    # 导出粗粒度标准化表为xlsx文件
     df = pd.DataFrame(location,columns=["mid","date","time_status","ts_loc","space_status","X_WGS84","Y_WGS84","confidence","buffer"])
     df.to_excel(config.RESULT_SAVE_PATH, index=False)
 
@@ -227,20 +222,19 @@ def NER_Standardize_Geocoder(i, sentence,NER):
 
 def coarse_ist(data,devices:str):
     if devices.upper() == "GPU":
-        spacy.require_gpu()  # 使用GPU进行NER
+        spacy.require_gpu()  
         print("GPU is enabled and ready for NER")
     elif devices.upper() == "CPU":
         print("CPU is enabled and ready for NER")
     else:
         print("Please use the correct device: GPU or CPU !")
-    # 载入NER模型
+
     NER = spacy.load("zh_core_web_trf",
                      exclude=["tagger", "parser", "entity_linker", "entity_ruler", "textcat", "textcat_multilabel",
                               "lemmatizer", "trainable_lemmatizer", "morphologizer", "attribute_ruler", "senter",
-                              "sentencizer", "tok2vec"])  # 排除部分无关标签，提升效率
-    # 文本分句
+                              "sentencizer", "tok2vec"])  
+
     sentence_list = []
     for i in range(len(data)):
         sentence_list.append(sentence_split(data[i]['text'], cri='coarse'))
-    # 一次性实现NER、时空标准化、地理编码
     NER_Standardize_Geocoder(data, sentence_list,NER)
