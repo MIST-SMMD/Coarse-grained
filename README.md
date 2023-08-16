@@ -10,6 +10,13 @@ Discussions about the paper are welcomed in the [discussion panel](https://githu
 
 ![Data](GIF.gif)
 
+## Introduction
+Due to the high degree of spontaneity and diversity in social media narratives and the lack of a unified text format, we designed a set of rigorous spatiotemporal information standardization rules to efficiently extract key spatiotemporal information from a large amount of Weibo data. 
+- ### Flowchart of the Spatiotemporal Standardization:
+![Figure1](img/figure1.png)
+- ### Three Common Examples of Standardization:
+![Figure2](img/figure2.png)
+
 ## Colab demo
 Want to run MIST-SMMD with custom image pairs without configuring your own GPU environment? Try the Colab demo:
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1KQjqZSgTuCoWj6k4e2gpgLt1XBp37EXj?usp=sharing)
