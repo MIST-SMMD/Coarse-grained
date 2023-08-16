@@ -9,7 +9,7 @@
 
 
 """
-    CSV file read and write operations
+    Excel file read and write operations
 """
 
 import os
