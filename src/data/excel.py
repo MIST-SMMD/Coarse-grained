@@ -9,7 +9,7 @@
 
 
 """
-    CSV文件读写操作
+    CSV file read and write operations
 """
 
 import os
@@ -18,27 +18,27 @@ import numpy as np
 
 def read_excel(path):
     """
-        读取Excel文件
-    Args:
-        path: excel文件路径
+        Reading an Excel file
+    Args.
+        path: excel file path
 
     Returns:list or None
 
     """
-    if os.path.exists(path):  # 判断excel是否存在
-        return (np.array(pd.read_excel(path))).tolist()  # 用pd库读为df再从np.array转到list
-    else:  # 不存在返回空值
+    if os.path.exists(path):  
+        return (np.array(pd.read_excel(path))).tolist()  
+    else:  
         return None
 
 
 def write_excel(path, data, fields):
     """
-        写入Excel文件
-    Args:
-        path: excel文件路径
-        fields: 字段list
+        Write to Excel file
+    parameter:
+        path: path to the excel file
+        fields: list of fields
 
-    Returns: True Success, False Fail
+    Returns: true for success, false for failure
 
     """
 
