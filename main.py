@@ -5,12 +5,12 @@ from src.data.csv import read_csv, write_csv
 
 def read_weibo(path, fileType):
     """
-        微博数据集的读取
-    Args:
-        path: 文件路径
-        fileType: 文件类型
+        Reading of the microblogging dataset
+    Args.
+        path: file path
+        fileType: file type
 
-    Returns:数据列表list
+    Returns: data list list
 
     """
     if fileType.lower() == "excel":
@@ -18,18 +18,17 @@ def read_weibo(path, fileType):
     elif fileType.lower() == "csv":
         dataSetData = read_csv(path, 'ansi')
     else:
-        print("请输入正确的类型，仅支持csv与excel文件格式！")
+        print("Please enter the correct type to support csv & excel file formats only!")
     result = []
     for item in dataSetData:
         result.append(
-            {'create_at': str(item[1]), 'text': str(item[2]), 'region': str(item[4]), 'mid': str(item[0])})  # 构造list
+            {'create_at': str(item[1]), 'text': str(item[2]), 'region': str(item[4]), 'mid': str(item[0])})  # Build list
     return result
 
 
 if __name__ == '__main__':
     fields = ['text', 'sentence', 'create_at', 'ner_time', 'ner_gpe', 'ner_fac', 'stand_time', 'stand_time_status',
-              'stand_loc', 'stand_loc_status', 'loc_wgs84', 'loc_confidence', 'mid']  # 列名
-    write_csv(config.TEMP_SAVE_PATH, fields)  # 写标签列
-    # write_excel(config.SAVE_PATH, fields)   # 写标签列
-    data = read_weibo(config.ORIGINAL_PATH, fileType="excel")  # 读取数据库导出的EXCEL数据
-    coarse_ist(data[:50],devices="CPU")  # 粗粒度时空信息提取(这里默认CPU且演示前一百个)
+              'stand_loc', 'stand_loc_status', 'loc_wgs84', 'loc_confidence', 'mid'] 
+    write_csv(config.TEMP_SAVE_PATH, fields)  # Write Label Column
+    data = read_weibo(config.ORIGINAL_PATH, fileType="excel")  # Read EXCEL data exported from database
+    coarse_ist(data[:50],devices="CPU")  # Coarse-grained spatio-temporal information extraction (here the default CPU and the first hundred are demonstrated)
